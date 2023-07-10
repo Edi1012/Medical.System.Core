@@ -1,7 +1,6 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
+﻿using MongoDB.Bson.Serialization.Attributes;
 
-namespace Vifaru.Core.Models.FixedIncome;
+namespace Medical.System.Core.Models.Catalogs
 
 [BsonIgnoreExtraElements]
 public class Supplies
