@@ -9,6 +9,7 @@
 	<Authors>Edi Rosuna</Authors>
 	<Company>Edi Rosuna</Company>
 	<PackageDescription>Medical System class library</PackageDescription>
+	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 
   </PropertyGroup>
 
