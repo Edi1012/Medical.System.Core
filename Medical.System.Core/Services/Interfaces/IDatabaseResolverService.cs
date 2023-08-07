@@ -1,4 +1,4 @@
-﻿using Vifaru.Core.Database;
+﻿using Medical.System.Core.Database;
 
 namespace Medical.System.Core.Services.Interfaces;
 

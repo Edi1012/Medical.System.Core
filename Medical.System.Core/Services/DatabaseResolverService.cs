@@ -1,8 +1,6 @@
-﻿using MongoDB.Bson.Serialization.Serializers;
-using MongoDB.Bson.Serialization;
-using MongoDB.Driver;
-using Vifaru.Core.Database;
+﻿using Medical.System.Core.Database;
 using Medical.System.Core.Services.Interfaces;
+using MongoDB.Driver;
 
 namespace Medical.System.Core.Services;
 
