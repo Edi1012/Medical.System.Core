@@ -8,4 +8,5 @@ public interface ICatalogsService
     Task DeleteUserAsync(string id);
     Task<User> GetUserByIdAsync(string id);
     Task UpdateUserAsync(User user);
+    Task<bool> ExistUserNameAsync(string userName);
 }

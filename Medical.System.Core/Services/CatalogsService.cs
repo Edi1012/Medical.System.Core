@@ -39,5 +39,10 @@ public class CatalogsService : ICatalogsService
     {
         await _users.DeleteOneAsync(x => x.Id == id);
     }
+
+    public async Task<bool> ExistUserNameAsync(string userName)
+    {
+        return await _users.CountDocumentsAsync(x => x.UserName == userName) != 0;
+    }
 }
 
