@@ -1,13 +1,12 @@
 ﻿using NLog;
 using MongoDB.Driver;
 
-namespace Vifaru.Core.Database;
+namespace Medical.System.Core.Database;
 
 public class MongoDatabase : IMongo
 {
     private readonly IMongoClient   MongoClient;
     private readonly IMongoDatabase Database;
-    private readonly ILogger        Logger;
 
     public IMongoClient GetClient() => MongoClient;
 
@@ -15,29 +14,20 @@ public class MongoDatabase : IMongo
     {
         try
         {
-            Logger              = LogManager.GetCurrentClassLogger();
-            MongoClient         = new MongoClient(ClientSettings);
+            //TODO:2023-08-06:Remove hardcoded
+            MongoClient         = new MongoClient("mongodb://localhost:27017/");
 
             Database            = MongoClient.GetDatabase(DatabaseName);
 
         }
         catch (Exception ex)
         {
-            Logger.Error(ex, "Error Starting MongoDatabase");
+            throw;
         }
     }
 
     public IMongoCollection<T> GetColl<T>(string collName)
     {
         return Database.GetCollection<T>(collName);
-    }
-
-    public async Task<List<string>> GetIndexes<T>(string CollectionName)
-    {
-        var Collection = GetColl<T>(CollectionName);
-
-        return (await (await Collection.Indexes.ListAsync())
-            .ToListAsync()).Select(d => d.GetElement("name").Value.ToString())
-            .ToList();
     }
 }
