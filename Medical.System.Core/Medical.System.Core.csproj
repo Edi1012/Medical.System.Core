@@ -5,7 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 	<PackageId>Medical.System.Core</PackageId>
-	<Version>1.0.6</Version>
+	<Version>1.0.7</Version>
 	<Authors>Edi Rosuna</Authors>
 	<Company>Edi Rosuna</Company>
 	<PackageDescription>Medical System class library</PackageDescription>
@@ -14,6 +14,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="11.6.0" />
     <PackageReference Include="MongoDB.Bson" Version="2.20.0" />
     <PackageReference Include="MongoDB.Driver" Version="2.20.0" />
     <PackageReference Include="NLog" Version="5.2.2" />
