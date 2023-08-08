@@ -16,12 +16,16 @@ public class CreateUserValidator : AbstractValidator<CreateUserDto>
 
         RuleFor(x => x.UserName)
             .NotEmpty().WithMessage("El nombre de usuario es requerido")
-            .MaximumLength(50).WithMessage("No se puede repetir el usuario")
-            .MustAsync(async (userName, cancellation) =>
-             {
-                 bool exists = await CatalogsService.ExistUserNameAsync(userName);
-                 return !exists;
-             }).WithMessage("El nombre de usuario ya existe");
+            .MaximumLength(50).WithMessage("La longitud máxima del nombre de usuario es 50 caracteres")
+            .MustAsync(UserNameDoesNotExist).WithMessage("El nombre de usuario ya existe");
+
+        RuleFor(x => x.Password)
+            .NotEmpty().WithMessage("El password del usuario es requerido");
     }
 
+    private async Task<bool> UserNameDoesNotExist(string userName, CancellationToken cancellationToken)
+    {
+        bool exists = await CatalogsService.ExistUserNameAsync(userName);
+        return !exists;
+    }
 }
