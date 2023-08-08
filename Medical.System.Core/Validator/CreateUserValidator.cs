@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
-using Medical.System.Core.DTOs;
+using Medical.System.Core.Models.DTOs;
 using Medical.System.Core.Services.Interfaces;
 
-namespace Medical.System.Core.Validator.Catalogs.User;
+namespace Medical.System.Core.Validator;
 
 public class CreateUserValidator : AbstractValidator<CreateUserDto>
 {
@@ -12,7 +12,7 @@ public class CreateUserValidator : AbstractValidator<CreateUserDto>
     public CreateUserValidator(ICatalogsService CatalogsService)
     {
         this.CatalogsService = CatalogsService;
-        this.ClassLevelCascadeMode = CascadeMode.Stop;
+        ClassLevelCascadeMode = CascadeMode.Stop;
 
         RuleFor(x => x.UserName)
             .NotEmpty().WithMessage("El nombre de usuario es requerido")

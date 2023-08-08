@@ -1,7 +1,7 @@
 ﻿using Medical.System.Core.Services.Interfaces;
 using MongoDB.Driver;
 
-namespace Medical.System.Core.Services;
+namespace Medical.System.Core.Services.Implementations;
 
 public class VaultService : IVaultService
 {
@@ -9,7 +9,7 @@ public class VaultService : IVaultService
     {
         try
         {
-            var MongoClientSettings = new MongoClientSettings() { Server = new MongoServerAddress(connectionString)  };
+            var MongoClientSettings = new MongoClientSettings() { Server = new MongoServerAddress(connectionString) };
             return MongoClientSettings;
         }
         catch (Exception ex)

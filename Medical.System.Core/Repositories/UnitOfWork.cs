@@ -1,15 +1,14 @@
-﻿
-using Medical.System.Core.Models.Catalogs;
-using Medical.System.Core.Repositories.Interfaces;
+﻿using Medical.System.Core.Repositories.Interfaces;
 
 namespace Medical.System.Core.Repositories;
 
 
 public class UnitOfWork : IUnitOfWork
 {
-    public IRepository<User> Users { get; }
+    //public IRepository<User> Users { get; }
+    public IUserRepository Users { get; }
 
-    public UnitOfWork(IRepository<User> userRepository)
+    public UnitOfWork(IUserRepository userRepository)
     {
         Users = userRepository;
     }

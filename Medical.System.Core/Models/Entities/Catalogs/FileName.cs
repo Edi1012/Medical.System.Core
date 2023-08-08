@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Medical.System.Core.Models.Catalogs
+namespace Medical.System.Core.Models.Entities.Catalogs
 {
     internal class FileName
     {

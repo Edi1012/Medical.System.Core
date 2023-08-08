@@ -2,7 +2,7 @@
 using Medical.System.Core.Services.Interfaces;
 using MongoDB.Driver;
 
-namespace Medical.System.Core.Services;
+namespace Medical.System.Core.Services.Implementations;
 
 public class DatabaseResolverService : IDatabaseResolverService
 {

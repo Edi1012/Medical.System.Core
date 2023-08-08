@@ -1,8 +1,8 @@
-﻿using Medical.System.Core.Models.Catalogs;
+﻿using Medical.System.Core.Models.Entities.Catalogs;
 using Medical.System.Core.Services.Interfaces;
 using MongoDB.Driver;
 
-namespace Medical.System.Core.Services;
+namespace Medical.System.Core.Services.Implementations;
 
 public class CatalogsService : ICatalogsService
 {
