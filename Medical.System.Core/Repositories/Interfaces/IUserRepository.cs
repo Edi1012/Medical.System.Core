@@ -1,8 +1,8 @@
-﻿using Medical.System.Core.Models.Catalogs;
+﻿using Medical.System.Core.Models.Entities.Catalogs;
 
 namespace Medical.System.Core.Repositories.Interfaces;
 
-public interface IUserRepository : IRepository<User>
+public interface IUserRepository : IGenericRepository<User>
 {
-
+    Task<long> CountUsersAsync();
 }

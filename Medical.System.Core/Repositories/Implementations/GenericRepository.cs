@@ -2,13 +2,13 @@
 using Medical.System.Core.Services.Interfaces;
 using MongoDB.Driver;
 
-namespace Medical.System.Core.Repositories;
+namespace Medical.System.Core.Repositories.Implementations;
 
-public class Repository<T> : IRepository<T> where T : class
+public class GenericRepository<T> : IGenericRepository<T> where T : class
 {
     private readonly IMongoCollection<T> _collection;
 
-    public Repository(IDatabaseResolverService databaseResolver, DatabaseTypes databaseType, string collectionName)
+    public GenericRepository(IDatabaseResolverService databaseResolver, DatabaseTypes databaseType, string collectionName)
     {
         _collection = databaseResolver[databaseType].GetColl<T>(collectionName);
     }
