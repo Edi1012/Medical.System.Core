@@ -4,5 +4,5 @@ namespace Medical.System.Core.Repositories.Interfaces;
 
 public interface IUserRepository : IGenericRepository<User>
 {
-    Task<long> CountUsersAsync();
+    Task<bool> ExistUserNameAsync(string userName);
 }

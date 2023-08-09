@@ -15,7 +15,7 @@ public class DatabaseResolverService : IDatabaseResolverService
 
     private readonly Dictionary<DatabaseTypes, string> DatebaseEnvVarRelation = new()
     {
-        { DatabaseTypes.Catalogs,           "MONGO_DB_CATALOGS_DATABASE_NAME" },
+        { DatabaseTypes.MedicalSystem,           "MONGO_DB_CATALOGS_DATABASE_NAME" },
     };
 
     public DatabaseResolverService(IVaultService VaultService)
