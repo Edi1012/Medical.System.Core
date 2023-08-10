@@ -18,5 +18,5 @@ public class UserRepository : GenericRepository<User>, IUserRepository
     }
 
     public async Task<bool> ExistUserNameAsync(string userName) =>
-    await _collection.CountDocumentsAsync(x => x.UserName == userName) != 0;
+    await _collection.CountDocumentsAsync(x => x.Login.Username == userName) != 0;
 }

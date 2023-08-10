@@ -39,8 +39,11 @@ public class CatalogsService : ICatalogsService
         {
             // Generate new ObjectId
             Id = ObjectId.GenerateNewId().ToString(),
-            UserName = userDto.UserName,
-            Password = userDto.Password, // remember to hash this before saving in a real scenario!
+            Login = new Login()
+            {
+                Username = userDto.UserName,
+                PasswordHash = userDto.Password, // remember to hash this before saving in a real scenario!
+            }
         };
 
 
