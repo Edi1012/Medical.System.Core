@@ -1,17 +1,19 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
 using Medical.System.Core.Models.DTOs;
+using Medical.System.Core.Repositories;
+using Medical.System.Core.Repositories.Interfaces;
 using Medical.System.Core.Services.Interfaces;
 
 namespace Medical.System.Core.Validator;
 
 public class CreateUserValidator : AbstractValidator<CreateUserDto>
 {
-    private readonly ICatalogsService CatalogsService;
 
-    public CreateUserValidator(ICatalogsService CatalogsService)
+    public CreateUserValidator(IUserRepository userRepository)
     {
-        this.CatalogsService = CatalogsService;
+        UserRepository = userRepository;
+
         ClassLevelCascadeMode = CascadeMode.Stop;
 
         RuleFor(x => x.UserName)
@@ -23,9 +25,11 @@ public class CreateUserValidator : AbstractValidator<CreateUserDto>
             .NotEmpty().WithMessage("El password del usuario es requerido");
     }
 
+    public IUserRepository UserRepository { get; }
+
     private async Task<bool> UserNameDoesNotExist(string userName, CancellationToken cancellationToken)
     {
-        bool exists = await CatalogsService.ExistUserNameAsync(userName);
+        bool exists = await UserRepository.ExistUserNameAsync(userName);
         return !exists;
     }
 }

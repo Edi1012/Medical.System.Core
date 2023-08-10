@@ -8,9 +8,14 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
 {
     private readonly IMongoCollection<T> _collection;
 
+    public IDatabaseResolverService DatabaseResolver { get; }
+
     public GenericRepository(IDatabaseResolverService databaseResolver, DatabaseTypes databaseType, string collectionName)
     {
-        _collection = databaseResolver[databaseType].GetColl<T>(collectionName);
+        DatabaseResolver = databaseResolver;
+        databaseResolver.Init();
+        _collection = DatabaseResolver[databaseType].GetColl<T>(collectionName);
+
     }
 
     public async Task<IEnumerable<T>> GetAllAsync() =>

@@ -1,6 +1,6 @@
 ﻿using Medical.System.Core.Repositories.Interfaces;
 
-namespace Medical.System.Core.Repositories;
+namespace Medical.System.Core.UnitOfWork;
 
 
 public class UnitOfWork : IUnitOfWork

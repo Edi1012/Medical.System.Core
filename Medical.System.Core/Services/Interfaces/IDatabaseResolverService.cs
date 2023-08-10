@@ -5,7 +5,7 @@ namespace Medical.System.Core.Services.Interfaces;
 
 public enum DatabaseTypes
 {
-    Catalogs
+    MedicalSystem
 }
 
 public interface IDatabaseResolverService
