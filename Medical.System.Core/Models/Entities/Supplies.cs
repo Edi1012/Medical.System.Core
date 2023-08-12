@@ -1,6 +1,6 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 
-namespace Medical.System.Core.Models.Entities.Catalogs;
+namespace Medical.System.Core.Models.Entities;
 
 [BsonIgnoreExtraElements]
 public class Supplies

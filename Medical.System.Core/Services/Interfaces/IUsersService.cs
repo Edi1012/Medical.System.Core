@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Medical.System.Core.Services.Interfaces;
 
-public interface ICatalogsService
+public interface IUsersService
 {
     Task<User> CreateUserAsync(CreateUserDto user);
 }

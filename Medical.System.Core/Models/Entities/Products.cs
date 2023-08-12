@@ -1,7 +1,7 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace Medical.System.Core.Models.Entities.Catalogs;
+namespace Medical.System.Core.Models.Entities;
 
 public class Products
 

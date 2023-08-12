@@ -1,16 +1,15 @@
-﻿using FluentValidation;
+﻿using AutoMapper;
+using FluentValidation;
 using Medical.System.Core.Models.DTOs;
-using Medical.System.Core.Models.Entities.Catalogs;
+using Medical.System.Core.Models.Entities;
 using Medical.System.Core.Services.Interfaces;
 using Medical.System.Core.UnitOfWork;
 using Medical.System.Core.Validator;
-using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
-using MongoDB.Driver;
 
 namespace Medical.System.Core.Services.Implementations;
 
-public class CatalogsService : ICatalogsService
+public class UsersService : IUsersService
 {
     //private readonly IMongoCollection<User> _users;
     //private const string DATABASE_NAME = "MedicalSystem";
@@ -20,8 +19,9 @@ public class CatalogsService : ICatalogsService
 
     public IDatabaseResolverService DatabaseResolverService { get; }
     public IUnitOfWork UnitOfWork { get; }
+    public IMapper Mapper { get; }
 
-    public CatalogsService(/*IDatabaseResolverService DatabaseResolverService*/ IUnitOfWork unitOfWork)
+    public UsersService(/*IDatabaseResolverService DatabaseResolverService*/ IUnitOfWork unitOfWork)
     {
         UnitOfWork = unitOfWork;
         _createUserValidator = new CreateUserValidator(unitOfWork.Users);
@@ -35,13 +35,21 @@ public class CatalogsService : ICatalogsService
     public async Task<User> CreateUserAsync(CreateUserDto userDto)
     {
 
+
         var user = new User
         {
             // Generate new ObjectId
             Id = ObjectId.GenerateNewId().ToString(),
-            UserName = userDto.UserName,
-            Password = userDto.Password, // remember to hash this before saving in a real scenario!
+            Login = new Login()
+            {
+                Username = userDto.Login.Username,
+                PasswordHash = userDto.Login.PasswordHash, // remember to hash this before saving in a real scenario!
+                
+            },
+            Roles = userDto.Roles.Select(x => new Role { Name = x.Name }).ToList(),
         };
+
+        
 
 
         var validationResult = await _createUserValidator.ValidateAsync(userDto);
@@ -50,8 +58,6 @@ public class CatalogsService : ICatalogsService
         {
 
             throw new ValidationException(validationResult.Errors);
-            //return BadRequest(validationResult.Errors);
-            //return (validationResult.Errors.FirstOrDefault().ErrorMessage.ToString());
         }
 
         var result = UnitOfWork.Users.AddAsync(user);

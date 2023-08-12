@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Medical.System.Core.Models.Entities.Catalogs
+namespace Medical.System.Core.Models.Entities
 {
-    internal class FileName
+    public class EmergencyContact
     {
     }
 }

@@ -1,4 +1,4 @@
-﻿using Medical.System.Core.Models.Entities.Catalogs;
+﻿using Medical.System.Core.Models.Entities;
 using Medical.System.Core.Repositories.Implementations;
 using Medical.System.Core.Repositories.Interfaces;
 using Medical.System.Core.Services.Interfaces;
@@ -18,5 +18,5 @@ public class UserRepository : GenericRepository<User>, IUserRepository
     }
 
     public async Task<bool> ExistUserNameAsync(string userName) =>
-    await _collection.CountDocumentsAsync(x => x.UserName == userName) != 0;
+    await _collection.CountDocumentsAsync(x => x.Login.Username == userName) != 0;
 }
