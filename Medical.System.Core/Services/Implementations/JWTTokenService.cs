@@ -80,6 +80,11 @@ public class TokenService : ITokenService
             expires: DateTime.Now.AddMinutes(30), // Expiración, ajustable según tus necesidades
             signingCredentials: creds);
 
+
+        
+        UserRepository.UpdateTokenAsync(new Login() { Username = loginDTO.Username, Token = new JwtSecurityTokenHandler().WriteToken(token) });
+
+
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
     public bool ValidateToken(string token)
