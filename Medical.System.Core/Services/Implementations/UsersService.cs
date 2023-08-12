@@ -1,16 +1,15 @@
-﻿using FluentValidation;
+﻿using AutoMapper;
+using FluentValidation;
 using Medical.System.Core.Models.DTOs;
 using Medical.System.Core.Models.Entities;
 using Medical.System.Core.Services.Interfaces;
 using Medical.System.Core.UnitOfWork;
 using Medical.System.Core.Validator;
-using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
-using MongoDB.Driver;
 
 namespace Medical.System.Core.Services.Implementations;
 
-public class CatalogsService : ICatalogsService
+public class UsersService : IUsersService
 {
     //private readonly IMongoCollection<User> _users;
     //private const string DATABASE_NAME = "MedicalSystem";
@@ -20,8 +19,9 @@ public class CatalogsService : ICatalogsService
 
     public IDatabaseResolverService DatabaseResolverService { get; }
     public IUnitOfWork UnitOfWork { get; }
+    public IMapper Mapper { get; }
 
-    public CatalogsService(/*IDatabaseResolverService DatabaseResolverService*/ IUnitOfWork unitOfWork)
+    public UsersService(/*IDatabaseResolverService DatabaseResolverService*/ IUnitOfWork unitOfWork)
     {
         UnitOfWork = unitOfWork;
         _createUserValidator = new CreateUserValidator(unitOfWork.Users);
@@ -34,25 +34,6 @@ public class CatalogsService : ICatalogsService
 
     public async Task<User> CreateUserAsync(CreateUserDto userDto)
     {
-        //JSON Example of user
-            //{ 
-                //    "_id" : ObjectId("5f9b3b7b9d9b3b0a9c9d9b3b"),
-                //    "login" : {
-                //        "username" : "johndoe",
-                //        "passwordHash" : "Password1!"
-                //    },
-                //    "firstName" : "John",
-                //    "lastName" : "Doe",
-                //    "email" : "johndoe@localhost",
-                //    "phone" : "1234567890",
-                //    "role" : "Admin",
-                //    "isActive" : true,
-                //    "createdOn" : ISODate("2020-10-30T15:00:00.000Z"),
-                //    "createdBy" : "Admin",
-                //    "modifiedOn" : ISODate("2020-10-30T15:00:00.000Z"),
-                //    "modifiedBy" : "Admin"
-                //}
-
 
 
         var user = new User
@@ -61,9 +42,11 @@ public class CatalogsService : ICatalogsService
             Id = ObjectId.GenerateNewId().ToString(),
             Login = new Login()
             {
-                Username = userDto.UserName,
-                PasswordHash = userDto.Password, // remember to hash this before saving in a real scenario!
-            }
+                Username = userDto.Login.Username,
+                PasswordHash = userDto.Login.PasswordHash, // remember to hash this before saving in a real scenario!
+                
+            },
+            Roles = userDto.Roles.Select(x => new Role { Name = x.Name }).ToList(),
         };
 
         
@@ -75,8 +58,6 @@ public class CatalogsService : ICatalogsService
         {
 
             throw new ValidationException(validationResult.Errors);
-            //return BadRequest(validationResult.Errors);
-            //return (validationResult.Errors.FirstOrDefault().ErrorMessage.ToString());
         }
 
         var result = UnitOfWork.Users.AddAsync(user);
