@@ -1,9 +1,7 @@
 ﻿using FluentValidation;
-using FluentValidation.Results;
+using Medical.System.Core.Enums;
 using Medical.System.Core.Models.DTOs;
-using Medical.System.Core.Repositories;
 using Medical.System.Core.Repositories.Interfaces;
-using Medical.System.Core.Services.Interfaces;
 
 namespace Medical.System.Core.Validator;
 
@@ -16,13 +14,17 @@ public class CreateUserValidator : AbstractValidator<CreateUserDto>
 
         ClassLevelCascadeMode = CascadeMode.Stop;
 
-        RuleFor(x => x.UserName)
+        RuleFor(x => x.Login.Username)
             .NotEmpty().WithMessage("El nombre de usuario es requerido")
             .MaximumLength(50).WithMessage("La longitud máxima del nombre de usuario es 50 caracteres")
             .MustAsync(UserNameDoesNotExist).WithMessage("El nombre de usuario ya existe");
 
-        RuleFor(x => x.Password)
+        RuleFor(x => x.Login.PasswordHash)
             .NotEmpty().WithMessage("El password del usuario es requerido");
+
+        RuleFor(x => x.Roles)
+            .NotEmpty().WithMessage("El usuario debe tener al menos un rol")
+            .Must(x => x.All(y => Enum.IsDefined(typeof(UserRoleEnum), y.Name))).WithMessage("El rol no existe");
     }
 
     public IUserRepository UserRepository { get; }
