@@ -1,6 +1,6 @@
 ﻿namespace Medical.System.Core.Enums;
 
-public enum UserRole
+public enum UserRoleEnum
 {
     Admin,
     Doctor,

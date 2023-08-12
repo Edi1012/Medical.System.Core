@@ -1,10 +1,12 @@
-﻿using Medical.System.Core.Models.Entities;
+﻿using DnsClient;
+using Medical.System.Core.Models.DTOs;
+using Medical.System.Core.Models.Entities;
 
 namespace Medical.System.Core.Services.Interfaces
 {
     public interface ITokenService
     {
-        string CreateToken(User user);
+        Task<string> CreateToken(LoginDTO user);
         bool ValidateToken(string token);
     }
 }
