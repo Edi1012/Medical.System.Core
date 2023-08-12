@@ -1,4 +1,4 @@
-﻿using Medical.System.Core.Models.Entities.Catalogs;
+﻿using Medical.System.Core.Models.Entities;
 using Medical.System.Core.Repositories.Implementations;
 using Medical.System.Core.Repositories.Interfaces;
 using Medical.System.Core.Services.Interfaces;
