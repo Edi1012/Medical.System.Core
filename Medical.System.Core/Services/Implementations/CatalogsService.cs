@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using Medical.System.Core.Models.DTOs;
-using Medical.System.Core.Models.Entities.Catalogs;
+using Medical.System.Core.Models.Entities;
 using Medical.System.Core.Services.Interfaces;
 using Medical.System.Core.UnitOfWork;
 using Medical.System.Core.Validator;
@@ -34,6 +34,26 @@ public class CatalogsService : ICatalogsService
 
     public async Task<User> CreateUserAsync(CreateUserDto userDto)
     {
+        //JSON Example of user
+            //{ 
+                //    "_id" : ObjectId("5f9b3b7b9d9b3b0a9c9d9b3b"),
+                //    "login" : {
+                //        "username" : "johndoe",
+                //        "passwordHash" : "Password1!"
+                //    },
+                //    "firstName" : "John",
+                //    "lastName" : "Doe",
+                //    "email" : "johndoe@localhost",
+                //    "phone" : "1234567890",
+                //    "role" : "Admin",
+                //    "isActive" : true,
+                //    "createdOn" : ISODate("2020-10-30T15:00:00.000Z"),
+                //    "createdBy" : "Admin",
+                //    "modifiedOn" : ISODate("2020-10-30T15:00:00.000Z"),
+                //    "modifiedBy" : "Admin"
+                //}
+
+
 
         var user = new User
         {
@@ -45,6 +65,8 @@ public class CatalogsService : ICatalogsService
                 PasswordHash = userDto.Password, // remember to hash this before saving in a real scenario!
             }
         };
+
+        
 
 
         var validationResult = await _createUserValidator.ValidateAsync(userDto);
