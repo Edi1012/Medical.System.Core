@@ -1,4 +1,8 @@
-﻿using Medical.System.Core.Models.Entities;
+﻿using FluentValidation;
+using Medical.System.Core.Models.DTOs;
+using Medical.System.Core.Models.Entities;
+using Medical.System.Core.Repositories;
+using Medical.System.Core.Repositories.Interfaces;
 using Medical.System.Core.Services.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -11,12 +15,14 @@ namespace Medical.System.Core.Services.Implementations;
 public class TokenService : ITokenService
 {
 
-    public TokenService(IConfiguration configuration)
+    public TokenService(IConfiguration configuration, IUserRepository userRepository)
     {
         Configuration = configuration;
+        UserRepository = userRepository;
     }
 
     public IConfiguration Configuration { get; }
+    public IUserRepository UserRepository { get; }
 
     //public string CreateToken(User user)
     //{
@@ -39,8 +45,22 @@ public class TokenService : ITokenService
     //    return tokenHandler.WriteToken(token);
     //}
 
-    public string CreateToken(User user)
+    public async Task<string> CreateToken(LoginDTO loginDTO)
     {
+
+
+        if (!await UserRepository.ExistUserNameAsync(loginDTO.Username))
+        {
+            throw new ValidationException("Usuario no Existe");
+        }
+
+        if (!await UserRepository.Loggin(loginDTO))
+        {
+            throw new ValidationException("Usuario no Existe");
+        }
+
+        User user = new User() { Login = new Login() { Username = "EdgarIsaac", PasswordHash = "Hola1" } };
+
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 

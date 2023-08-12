@@ -1,4 +1,5 @@
-﻿using Medical.System.Core.Models.Entities;
+﻿using Medical.System.Core.Models.DTOs;
+using Medical.System.Core.Models.Entities;
 using Medical.System.Core.Repositories.Implementations;
 using Medical.System.Core.Repositories.Interfaces;
 using Medical.System.Core.Services.Interfaces;
@@ -19,4 +20,7 @@ public class UserRepository : GenericRepository<User>, IUserRepository
 
     public async Task<bool> ExistUserNameAsync(string userName) =>
     await _collection.CountDocumentsAsync(x => x.Login.Username == userName) != 0;
+
+    public async Task<bool> Loggin(LoginDTO LogginDTO) =>
+    await _collection.CountDocumentsAsync(x => x.Login.Username == LogginDTO.Username && x.Login.PasswordHash == LogginDTO.PasswordHash) != 0;
 }
