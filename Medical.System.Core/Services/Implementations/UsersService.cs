@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using FluentValidation;
+﻿using FluentValidation;
 using Medical.System.Core.Models.DTOs;
 using Medical.System.Core.Models.Entities;
 using Medical.System.Core.Services.Interfaces;
@@ -19,7 +18,6 @@ public class UsersService : IUsersService
 
     public IDatabaseResolverService DatabaseResolverService { get; }
     public IUnitOfWork UnitOfWork { get; }
-    public IMapper Mapper { get; }
 
     public UsersService(/*IDatabaseResolverService DatabaseResolverService*/ IUnitOfWork unitOfWork)
     {
