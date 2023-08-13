@@ -24,7 +24,7 @@ public class UserRepository : GenericRepository<User>, IUserRepository
     public async Task<bool> Loggin(LoginDTO LogginDTO) =>
     await _collection.CountDocumentsAsync(x => x.Login.Username == LogginDTO.Username && x.Login.PasswordHash == LogginDTO.PasswordHash) != 0;
 
-    public async Task<bool> UpdateTokenAsync(Login login)
+    public async Task<bool> UpdateTokenAsync(Loggin login)
     {
         try
         {
@@ -45,5 +45,10 @@ public class UserRepository : GenericRepository<User>, IUserRepository
         {
             throw; // Re-throw the exception to be handled by the caller
         }
+    }
+
+    public async Task<User?> GetByLogginAsync(Loggin loggin)
+    {
+        return await _collection.Find(u => u.Login.Username == loggin.Username && u.Login.PasswordHash == loggin.PasswordHash).FirstOrDefaultAsync();
     }
 }

@@ -14,7 +14,7 @@ public class User
     public DateTime BirthDate { get; set; } // Date of Birth
 
     public string Email { get; set; }
-    public Login Login { get; set; } = new Login();
+    public Loggin Login { get; set; } = new Loggin();
     public List<Role> Roles { get; set; } = new List<Role>();
 
     // Additional Fields

@@ -2,12 +2,14 @@
 using Medical.System.Core.Models.DTOs;
 using Medical.System.Core.Models.Entities;
 using Medical.System.Core.Repositories;
+using Medical.System.Core.Repositories.Implementations;
 using Medical.System.Core.Repositories.Interfaces;
 using Medical.System.Core.Services.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace Medical.System.Core.Services.Implementations;
@@ -15,13 +17,16 @@ namespace Medical.System.Core.Services.Implementations;
 public class TokenService : ITokenService
 {
 
-    public TokenService(IConfiguration configuration, IUserRepository userRepository)
+    public TokenService(IConfiguration configuration, IUserRepository userRepository, ITokenRepository tokenRepository)
     {
         Configuration = configuration;
+        TokenRepository = tokenRepository;
         UserRepository = userRepository;
     }
 
+
     public IConfiguration Configuration { get; }
+    public ITokenRepository TokenRepository { get; }
     public IUserRepository UserRepository { get; }
 
     //public string CreateToken(User user)
@@ -59,7 +64,7 @@ public class TokenService : ITokenService
             throw new ValidationException("Usuario no Existe");
         }
 
-        User user = new User() { Login = new Login() { Username = "EdgarIsaac", PasswordHash = "Hola1" } };
+        User user = await UserRepository.GetByLogginAsync(new Loggin() { Username = loginDTO.Username, PasswordHash = loginDTO.PasswordHash });
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -73,19 +78,39 @@ public class TokenService : ITokenService
 
         };
 
-        var token = new JwtSecurityToken(
+
+        // Añadir un claim por cada rol del usuario
+        foreach (var role in user.Roles)
+        {
+            claims.Append(new Claim(ClaimTypes.Role, role.Name));
+        }
+
+
+        var jwtSecurityToken = new JwtSecurityToken(
             issuer: Configuration["Jwt:Issuer"],
             audience: Configuration["Jwt:Audience"],
             claims: claims,
             expires: DateTime.Now.AddMinutes(30), // Expiración, ajustable según tus necesidades
             signingCredentials: creds);
 
+        var token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+
+        // Crear el objeto RevokedToken y llenar los campos necesarios
+        var revokedToken = new RevokedToken
+        {
+            TokenID = token,
+            UserID = user.Id, // Asegúrate de que user.Id tenga el ObjectId correcto
+            ValidFrom = jwtSecurityToken.ValidFrom,
+            ValidTo = jwtSecurityToken.ValidTo,
+            Revoked = false
+        };
 
         
-        UserRepository.UpdateTokenAsync(new Login() { Username = loginDTO.Username, Token = new JwtSecurityTokenHandler().WriteToken(token) });
+        await TokenRepository.AddAsync(revokedToken);
+        //UserRepository.UpdateTokenAsync(new Loggin() { Username = loginDTO.Username, Token = new JwtSecurityTokenHandler().WriteToken(token) });
 
 
-        return new JwtSecurityTokenHandler().WriteToken(token);
+        return token;
     }
     public bool ValidateToken(string token)
     {
@@ -111,32 +136,35 @@ public class TokenService : ITokenService
 
             return true;
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             return false;
         }
     }
 
+    //TODO: add token repository and add token to database and to user
 
-    //public string GenerateJwtToken(string username)
-    //{
-    //    var claims = new[]
-    //    {
-    //    new Claim(JwtRegisteredClaimNames.Sub, username),
-    //    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), // Unique Token identifier
-    //    // You can add more claims here if needed
-    //};
+    public static string EncryptToken(string token, string key, string iv)
+    {
+        using (Aes aesAlg = Aes.Create())
+        {
+            aesAlg.Key = Convert.FromBase64String(key); // Clave de 256 bits
+            aesAlg.IV = Convert.FromBase64String(iv);  // Vector de inicialización de 128 bits
 
-    //    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]));
-    //    var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            ICryptoTransform encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
 
-    //    var token = new JwtSecurityToken(
-    //        issuer: Configuration["Jwt:Issuer"],
-    //        audience: Configuration["Jwt:Audience"],
-    //        claims: claims,
-    //        expires: DateTime.Now.AddMinutes(30), // You can set the token expiration time
-    //        signingCredentials: creds);
+            using (MemoryStream msEncrypt = new MemoryStream())
+            {
+                using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
+                {
+                    using (StreamWriter swEncrypt = new StreamWriter(csEncrypt))
+                    {
+                        swEncrypt.Write(token);
+                    }
+                }
+                return Convert.ToBase64String(msEncrypt.ToArray());
+            }
+        }
+    }
 
-    //    return new JwtSecurityTokenHandler().WriteToken(token);
-    //}
 }

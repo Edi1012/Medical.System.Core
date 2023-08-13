@@ -28,7 +28,7 @@ public class UsersService : IUsersService
         var user = new User
         {
             Id = ObjectId.GenerateNewId().ToString(),
-            Login = new Login()
+            Login = new Loggin()
             {
                 Username = userDto.Login.Username,
                 PasswordHash = userDto.Login.PasswordHash,
