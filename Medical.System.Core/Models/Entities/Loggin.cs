@@ -1,6 +1,6 @@
 ﻿namespace Medical.System.Core.Models.Entities;
 
-public class Login
+public class Loggin
 {
     public string Username { get; set; }
     public string PasswordHash { get; set; }

@@ -7,5 +7,6 @@ public interface IUserRepository : IGenericRepository<User>
 {
     Task<bool> ExistUserNameAsync(string userName);
     Task<bool> Loggin(LoginDTO loggingDTO);
-    Task<bool> UpdateTokenAsync(Login login);
+    Task<bool> UpdateTokenAsync(Loggin login);
+    Task<User?> GetByLogginAsync(Loggin userName);
 }
