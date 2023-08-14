@@ -78,7 +78,7 @@ public class ExceptionMiddleware
             Message = message
         };
 
-        response.Errors = (exception is ValidationException) ? errors : null;
+        response.Errors = (exception is FluentValidation.ValidationException) ? errors : null;
 
         return context.Response.WriteAsync(JsonConvert.SerializeObject(response));
     }

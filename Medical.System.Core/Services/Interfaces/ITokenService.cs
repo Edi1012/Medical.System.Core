@@ -7,6 +7,6 @@ namespace Medical.System.Core.Services.Interfaces
     public interface ITokenService
     {
         Task<string> CreateToken(LoginDTO user);
-        bool ValidateToken(string token);
+        //bool ValidateToken(string token);
     }
 }
