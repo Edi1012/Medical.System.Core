@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Medical.System.Core.Messages.Responses;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 
@@ -47,14 +48,5 @@ public class ErrorHandlingMiddleware
     }
 }
 //TODO:Move class to another file
-public class ErrorResponse
-{
-    public string Message { get; set; }
-    public IEnumerable<ErrorDetail> Errors { get; set; }
-}
 
-public class ErrorDetail
-{
-    public string PropertyName { get; set; }
-    public string ErrorMessage { get; set; }
-}
+
