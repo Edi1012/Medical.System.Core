@@ -1,10 +1,12 @@
-﻿using FluentValidation;
+﻿
+using Medical.System.Core.Exceptions;
 using Medical.System.Core.Models.DTOs;
 using Medical.System.Core.Models.Entities;
 using Medical.System.Core.Repositories;
 using Medical.System.Core.Repositories.Implementations;
 using Medical.System.Core.Repositories.Interfaces;
 using Medical.System.Core.Services.Interfaces;
+using Medical.System.Core.Validator;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -29,42 +31,34 @@ public class TokenService : ITokenService
     public ITokenRepository TokenRepository { get; }
     public IUserRepository UserRepository { get; }
 
-    //public string CreateToken(User user)
-    //{
-    //    var tokenHandler = new JwtSecurityTokenHandler();
-    //    var key = Encoding.ASCII.GetBytes(Configuration["Jwt:Key"]);
-    //    var tokenDescriptor = new SecurityTokenDescriptor
-    //    {
-    //        Subject = new ClaimsIdentity(new Claim[]
-    //        {
-    //            //new Claim(ClaimTypes.Name, user.Email),
-    //            new Claim(ClaimTypes.Country, "Mexico"),
-    //            new Claim(ClaimTypes.StreetAddress, "Rio Culiacan"),
-    //            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), // Unique Token identifier
-    //            // Aquí puedes agregar más reclamos si los necesitas
-    //        }),
-    //        Expires = DateTime.UtcNow.AddHours(1), // Expiración en 1 hora
-    //        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-    //    };
-    //    var token = tokenHandler.CreateToken(tokenDescriptor);
-    //    return tokenHandler.WriteToken(token);
-    //}
-
     public async Task<string> CreateToken(LoginDTO loginDTO)
     {
 
+        var validator = new CreateTokenValidator();
+        var result = validator.Validate(loginDTO);
 
-        if (!await UserRepository.ExistUserNameAsync(loginDTO.Username))
+        if (!result.IsValid)
         {
-            throw new ValidationException("Usuario no Existe");
-        }
-
-        if (!await UserRepository.Loggin(loginDTO))
-        {
-            throw new ValidationException("Usuario no Existe");
+            throw new FluentValidation.ValidationException(result.Errors);
         }
 
         User user = await UserRepository.GetByLogginAsync(new Loggin() { Username = loginDTO.Username, PasswordHash = loginDTO.PasswordHash });
+
+
+        if (user == null) 
+        {
+            throw new NotFoundException("Usuario no encontrado.");
+        }
+
+        //get token from DB
+        var RevokedToken  = await TokenRepository.GetByUserIdAsync(user.Id);
+
+        if (RevokedToken != null) 
+        {
+            if(!RevokedToken.Revoked)
+                return RevokedToken.TokenID;
+        }
+
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -143,7 +137,6 @@ public class TokenService : ITokenService
     }
 
     //TODO: add token repository and add token to database and to user
-
     public static string EncryptToken(string token, string key, string iv)
     {
         using (Aes aesAlg = Aes.Create())
