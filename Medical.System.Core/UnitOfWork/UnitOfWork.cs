@@ -7,10 +7,12 @@ public class UnitOfWork : IUnitOfWork
 {
     //public IRepository<User> Users { get; }
     public IUserRepository Users { get; }
+    public ISupplierRepository Supplier { get; }
 
-    public UnitOfWork(IUserRepository userRepository)
+    public UnitOfWork(IUserRepository userRepository, ISupplierRepository supplier)
     {
         Users = userRepository;
+        Supplier = supplier;
     }
 
     public Task CompleteAsync()

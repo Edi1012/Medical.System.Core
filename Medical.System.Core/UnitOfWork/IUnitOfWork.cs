@@ -7,6 +7,7 @@ public interface IUnitOfWork
 {
     //IRepository<User> Users { get; }
     IUserRepository Users { get; }
+    ISupplierRepository Supplier { get; }
     Task CompleteAsync();
 }
 
