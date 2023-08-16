@@ -47,6 +47,3 @@ public class ErrorHandlingMiddleware
         return context.Response.WriteAsync(JsonConvert.SerializeObject(response));
     }
 }
-//TODO:Move class to another file
-
-

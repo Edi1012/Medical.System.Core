@@ -6,8 +6,8 @@ namespace Medical.System.Core.Models.Entities;
 public class User
 {
     [BsonId]
-    [BsonRepresentation(BsonType.ObjectId)]
-    public string Id { get; set; }
+    [BsonRepresentation(BsonType.String)]
+    public Guid Id { get; set; } = Guid.NewGuid();
     public string Name { get; set; }
     public string LastName { get; set; }
     public string MiddleName { get; set; } // Paternal or Maternal Last Name

@@ -56,7 +56,8 @@ public class TokenService : ITokenService
         if (RevokedToken != null) 
         {
             if(!RevokedToken.Revoked)
-                return RevokedToken.TokenID;
+                if(this.ValidateToken(RevokedToken.TokenID))
+                    return RevokedToken.TokenID;
         }
 
 
@@ -106,7 +107,7 @@ public class TokenService : ITokenService
 
         return token;
     }
-    public bool ValidateToken(string token)
+    private bool ValidateToken(string token)
     {
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]));
         var tokenHandler = new JwtSecurityTokenHandler();

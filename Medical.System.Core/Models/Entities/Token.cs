@@ -1,18 +1,16 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Bson;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace Medical.System.Core.Models.Entities;
 
 public class RevokedToken
 {
     [BsonId]
-    [BsonRepresentation(BsonType.ObjectId)]
-    public string Id { get; set; }
+    [BsonRepresentation(BsonType.String)]
+    public Guid Id { get; set; } = Guid.NewGuid();
 
     public string TokenID { get; set; }
-
-    [BsonRepresentation(BsonType.ObjectId)]
-    public string UserID { get; set; }
+    public Guid UserID { get; set; }
 
     public DateTime ValidFrom { get; set; }
     public DateTime ValidTo { get; set; }
