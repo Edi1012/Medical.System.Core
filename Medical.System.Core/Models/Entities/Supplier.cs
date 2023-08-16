@@ -1,9 +1,12 @@
 ﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace Medical.System.Core.Models.Entities;
 public class Supplier
 {
-    public ObjectId Id { get; set; }
+    [BsonId]
+    [BsonRepresentation(BsonType.String)]
+    public Guid Id { get; set; } = Guid.NewGuid();
     public string Name { get; set; }
     public Address Address { get; set; }
     public string PhoneNumber { get; set; }

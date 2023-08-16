@@ -5,12 +5,12 @@ namespace Medical.System.Core.Models.Entities;
 
 public class RevokedToken
 {
-    public ObjectId Id { get; set; }
+    [BsonId]
+    [BsonRepresentation(BsonType.String)]
+    public Guid Id { get; set; } = Guid.NewGuid();
 
     public string TokenID { get; set; }
-
-    [BsonRepresentation(BsonType.ObjectId)]
-    public string UserID { get; set; }
+    public Guid UserID { get; set; }
 
     public DateTime ValidFrom { get; set; }
     public DateTime ValidTo { get; set; }
