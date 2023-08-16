@@ -1,13 +1,10 @@
 ﻿using Medical.System.Core.Enums;
 using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
-
+  
 namespace Medical.System.Core.Models.Entities;
 public class User
 {
-    [BsonId]
-    [BsonRepresentation(BsonType.ObjectId)]
-    public string Id { get; set; }
+    public ObjectId Id { get; set; }
     public string Name { get; set; }
     public string LastName { get; set; }
     public string MiddleName { get; set; } // Paternal or Maternal Last Name
