@@ -2,7 +2,6 @@
 using Medical.System.Core.Repositories.Interfaces;
 using Medical.System.Core.Services.Interfaces;
 using MongoDB.Driver;
-using NLog.Filters;
 
 namespace Medical.System.Core.Repositories.Implementations;
 
@@ -41,6 +40,6 @@ public class TokenRepository : GenericRepository<RevokedToken>, ITokenRepository
         // If UserID found and its Revoked is false, do nothing.
     }
 
-    public async Task<RevokedToken> GetByUserIdAsync(string UserId) =>
+    public async Task<RevokedToken> GetByUserIdAsync(Guid UserId) =>
     await _collection.Find(Builders<RevokedToken>.Filter.Eq("UserID", UserId)).FirstOrDefaultAsync();
 }

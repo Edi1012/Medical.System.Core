@@ -4,5 +4,5 @@ namespace Medical.System.Core.Repositories.Interfaces;
 
 public interface ITokenRepository : IGenericRepository<RevokedToken>
 {
-    Task<RevokedToken> GetByUserIdAsync(string UserId);
+    Task<RevokedToken> GetByUserIdAsync(Guid UserId);
 }

@@ -27,7 +27,6 @@ public class UsersService : IUsersService
         //TODO:use Automapper
         var user = new User
         {
-            Id = ObjectId.GenerateNewId().ToString(),
             Login = new Loggin()
             {
                 Username = userDto.Login.Username,

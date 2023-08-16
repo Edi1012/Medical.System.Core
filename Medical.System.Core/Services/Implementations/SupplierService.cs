@@ -1,8 +1,6 @@
 ﻿using Medical.System.Core.Models.DTOs;
 using Medical.System.Core.Models.Entities;
 using Medical.System.Core.UnitOfWork;
-using Medical.System.Core.Validator;
-using System.Runtime.Versioning;
 
 namespace Medical.System.Core.Services.Implementations;
 
@@ -20,7 +18,7 @@ public class SupplierService : ISupplierService
         return await UnitOfWork.Supplier.GetAllAsync();
     }
 
-    public async Task<Supplier> GetById(string id)
+    public async Task<Supplier> GetById(Guid id)
     {
         return await UnitOfWork.Supplier.GetByIdAsync(id);
     }
@@ -39,13 +37,9 @@ public class SupplierService : ISupplierService
         return supplier;
     }
 
-    //public void Update(string id, Supplier supplierIn)
-    //{
-    //    _suppliers.ReplaceOne(supplier => supplier.Id == id, supplierIn);
-    //}
-
-    //public void Remove(string id)
-    //{
-    //    _suppliers.DeleteOne(supplier => supplier.Id == id);
-    //}
+    public async Task<Supplier> GetByIdAsync(Guid id)
+    {
+        var supplier = await UnitOfWork.Supplier.GetByIdAsync(id);
+        return supplier;
+    }
 }
