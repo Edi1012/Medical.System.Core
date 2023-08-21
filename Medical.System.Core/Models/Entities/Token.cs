@@ -1,8 +1,10 @@
-﻿using MongoDB.Bson;
+﻿using Medical.System.Core.Attributes;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace Medical.System.Core.Models.Entities;
 
+[MongoCollectionName("revoked_tokens")]
 public class RevokedToken
 {
     [BsonId]
