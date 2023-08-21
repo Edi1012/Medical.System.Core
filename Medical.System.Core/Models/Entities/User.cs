@@ -1,8 +1,11 @@
-﻿using Medical.System.Core.Enums;
+﻿using Medical.System.Core.Attributes;
+using Medical.System.Core.Enums;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace Medical.System.Core.Models.Entities;
+
+[BsonCollectionName("users")]
 public class User
 {
     [BsonId]
@@ -29,6 +32,3 @@ public class User
 
     // Other fields as needed
 }
-
-
-
