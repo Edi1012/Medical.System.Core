@@ -1,4 +1,6 @@
-﻿using Medical.System.Core.Models.DTOs;
+﻿using Medical.System.Core.Attributes;
+using Medical.System.Core.Helpers;
+using Medical.System.Core.Models.DTOs;
 using Medical.System.Core.Models.Entities;
 using Medical.System.Core.Repositories.Implementations;
 using Medical.System.Core.Repositories.Interfaces;
@@ -12,10 +14,9 @@ public class UserRepository : GenericRepository<User>, IUserRepository
 
     private readonly IMongoCollection<User> _collection;
 
-
-    public UserRepository(IDatabaseResolverService databaseResolver) : base(databaseResolver, DatabaseTypes.MedicalSystem, "Catalogs_user")
+    public UserRepository(IDatabaseResolverService databaseResolver) : base(databaseResolver, DatabaseTypes.MedicalSystem, CollectionHelper.GetCollectionName<User>())
     {
-        _collection = databaseResolver[DatabaseTypes.MedicalSystem].GetColl<User>("Catalogs_user");
+        _collection = databaseResolver[DatabaseTypes.MedicalSystem].GetColl<User>(CollectionHelper.GetCollectionName<User>());
     }
 
     public async Task<bool> ExistUserNameAsync(string userName) =>
