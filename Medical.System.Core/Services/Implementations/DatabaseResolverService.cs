@@ -1,5 +1,6 @@
 ﻿using Medical.System.Core.Database;
 using Medical.System.Core.Services.Interfaces;
+using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 
 namespace Medical.System.Core.Services.Implementations;
@@ -15,12 +16,15 @@ public class DatabaseResolverService : IDatabaseResolverService
 
     private readonly Dictionary<DatabaseTypes, string> DatebaseEnvVarRelation = new()
     {
-        { DatabaseTypes.MedicalSystem,           "MONGO_DB_CATALOGS_DATABASE_NAME" },
+        { DatabaseTypes.MedicalSystem,           "MONGO_DB_MEDICAL_SYSTEM_DATABASE_NAME" },
     };
 
-    public DatabaseResolverService(IVaultService VaultService)
+    private readonly IConfiguration _databaseConfig;
+
+    public DatabaseResolverService(IVaultService VaultService, IConfiguration databaseConfig)
     {
         this.VaultService = VaultService;
+        this._databaseConfig = databaseConfig;
     }
 
     public async Task<IDatabaseResolverService> Init()
@@ -40,20 +44,17 @@ public class DatabaseResolverService : IDatabaseResolverService
             throw new ApplicationException("Resolver not initialized");
 
         if (!Databases.ContainsKey(rt))
-            Databases.Add(rt, CreateDatabase(DatebaseEnvVarRelation[rt]));
+            Databases.Add(rt, CreateDatabase(rt));
 
         return Databases[rt];
     }
-
-    private IMongo CreateDatabase(string EnvVarDatabaseName)
+    private IMongo CreateDatabase(DatabaseTypes databaseType)
     {
-        //TODO:2023-08-06:add envar 
-        var DatabaseName = Environment.GetEnvironmentVariable(EnvVarDatabaseName);
-
-        DatabaseName = "MedicalSystem";
+        string configKey = DatebaseEnvVarRelation[databaseType];
+        var DatabaseName = _databaseConfig[configKey];
 
         if (string.IsNullOrEmpty(DatabaseName))
-            throw new ApplicationException($"Environment variable {EnvVarDatabaseName} is not set");
+            throw new ApplicationException($"Configuration key {configKey} is not set");
 
         return new MongoDatabase(DatabaseName, MongoClientSettings);
     }

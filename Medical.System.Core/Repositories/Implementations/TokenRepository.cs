@@ -1,4 +1,5 @@
-﻿using Medical.System.Core.Models.Entities;
+﻿using Medical.System.Core.Helpers;
+using Medical.System.Core.Models.Entities;
 using Medical.System.Core.Repositories.Interfaces;
 using Medical.System.Core.Services.Interfaces;
 using MongoDB.Driver;
@@ -11,9 +12,9 @@ public class TokenRepository : GenericRepository<RevokedToken>, ITokenRepository
     private readonly IMongoCollection<RevokedToken> _collection;
 
 
-    public TokenRepository(IDatabaseResolverService databaseResolver) : base(databaseResolver, DatabaseTypes.MedicalSystem, "RevokedTokens")
+    public TokenRepository(IDatabaseResolverService databaseResolver) : base(databaseResolver, DatabaseTypes.MedicalSystem, MongoCollectionHelper.GetCollectionName<User>())
     {
-        _collection = databaseResolver[DatabaseTypes.MedicalSystem].GetColl<RevokedToken>("RevokedTokens");
+        _collection = databaseResolver[DatabaseTypes.MedicalSystem].GetColl<RevokedToken>(MongoCollectionHelper.GetCollectionName<User>());
     }
 
     public async Task AddAsync(RevokedToken entity)

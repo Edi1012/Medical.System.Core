@@ -14,9 +14,9 @@ public class UserRepository : GenericRepository<User>, IUserRepository
 
     private readonly IMongoCollection<User> _collection;
 
-    public UserRepository(IDatabaseResolverService databaseResolver) : base(databaseResolver, DatabaseTypes.MedicalSystem, CollectionHelper.GetCollectionName<User>())
+    public UserRepository(IDatabaseResolverService databaseResolver) : base(databaseResolver, DatabaseTypes.MedicalSystem, MongoCollectionHelper.GetCollectionName<User>())
     {
-        _collection = databaseResolver[DatabaseTypes.MedicalSystem].GetColl<User>(CollectionHelper.GetCollectionName<User>());
+        _collection = databaseResolver[DatabaseTypes.MedicalSystem].GetColl<User>(MongoCollectionHelper.GetCollectionName<User>());
     }
 
     public async Task<bool> ExistUserNameAsync(string userName) =>

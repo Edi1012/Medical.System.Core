@@ -5,7 +5,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace Medical.System.Core.Models.Entities;
 
-[BsonCollectionName("users")]
+[MongoCollectionName("users")]
 public class User
 {
     [BsonId]

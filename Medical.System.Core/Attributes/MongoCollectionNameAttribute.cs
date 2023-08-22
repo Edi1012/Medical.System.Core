@@ -2,11 +2,11 @@
 
 
 [AttributeUsage(AttributeTargets.Class, Inherited = false)]
-public sealed class BsonCollectionNameAttribute : Attribute
+public sealed class MongoCollectionNameAttribute : Attribute
 {
     public string Name { get; }
 
-    public BsonCollectionNameAttribute(string name)
+    public MongoCollectionNameAttribute(string name)
     {
         Name = name;
     }
