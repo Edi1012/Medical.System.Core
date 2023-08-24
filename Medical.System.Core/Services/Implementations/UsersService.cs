@@ -32,7 +32,7 @@ public class UsersService : IUsersService
                 Username = userDto.Login.Username,
                 PasswordHash = userDto.Login.PasswordHash,
             },
-            Roles = userDto.Roles.Select(x => new Role { Name = x.Name }).ToList(),
+            Roles = userDto.Roles.Select(x => new Role { Name = x }).ToList(),
         };
 
         

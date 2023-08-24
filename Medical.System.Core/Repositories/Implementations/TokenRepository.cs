@@ -12,9 +12,9 @@ public class TokenRepository : GenericRepository<RevokedToken>, ITokenRepository
     private readonly IMongoCollection<RevokedToken> _collection;
 
 
-    public TokenRepository(IDatabaseResolverService databaseResolver) : base(databaseResolver, DatabaseTypes.MedicalSystem, MongoCollectionHelper.GetCollectionName<User>())
+    public TokenRepository(IDatabaseResolverService databaseResolver) : base(databaseResolver, DatabaseTypes.MedicalSystem, MongoCollectionHelper.GetCollectionName<RevokedToken>())
     {
-        _collection = databaseResolver[DatabaseTypes.MedicalSystem].GetColl<RevokedToken>(MongoCollectionHelper.GetCollectionName<User>());
+        _collection = databaseResolver[DatabaseTypes.MedicalSystem].GetColl<RevokedToken>(MongoCollectionHelper.GetCollectionName<RevokedToken>());
     }
 
     public async Task AddAsync(RevokedToken entity)
