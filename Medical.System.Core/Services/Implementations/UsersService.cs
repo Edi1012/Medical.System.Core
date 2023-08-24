@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Medical.System.Core.Exceptions;
 using Medical.System.Core.Models.DTOs;
 using Medical.System.Core.Models.Entities;
 using Medical.System.Core.Services.Interfaces;
@@ -42,12 +43,24 @@ public class UsersService : IUsersService
 
         if (!validationResult.IsValid)
         {
-            throw new ValidationException(validationResult.Errors);
+            throw new FluentValidation.ValidationException(validationResult.Errors);
         }
 
         var result = UnitOfWork.Users.AddAsync(user);
 
         return user;
     }
+
+    public async Task<User> GetUserAsync(string id)
+    {
+        var user = await UnitOfWork.Users.GetByIdAsync(id);
+        if (user == null)
+        {
+            throw new NotFoundException("Usuario no encontrado.");
+        }
+
+        return user;
+    }
+
 }
 

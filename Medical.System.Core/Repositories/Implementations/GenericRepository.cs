@@ -21,7 +21,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     public async Task<IEnumerable<T>> GetAllAsync() =>
         await _collection.Find(x => true).ToListAsync();
 
-    public async Task<T> GetByIdAsync(Guid id) =>
+    public async Task<T> GetByIdAsync(string id) =>
         await _collection.Find(Builders<T>.Filter.Eq("Id", id)).FirstOrDefaultAsync();
 
     public async Task AddAsync(T entity) =>

@@ -8,6 +8,6 @@ namespace Medical.System.Core.Services.Implementations
     public interface ISupplierService
     {
         Task<Supplier> Create(CreateSupplierDto supplier);
-        Task<Supplier> GetByIdAsync(Guid id);
+        Task<Supplier> GetByIdAsync(string id);
     }
 }
