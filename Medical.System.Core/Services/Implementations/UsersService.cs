@@ -62,5 +62,17 @@ public class UsersService : IUsersService
         return user;
     }
 
+    public async Task<IEnumerable<User>> GetAll()
+    {
+        var users = await UnitOfWork.Users.GetAllAsync();
+
+        if (users == null)
+        {
+            return Enumerable.Empty<User>(); // Devolver una lista vacía en lugar de null
+        }
+
+        return users;
+    }
+
 }
 
