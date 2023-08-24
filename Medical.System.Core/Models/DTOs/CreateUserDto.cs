@@ -11,7 +11,7 @@ public class CreateUserDto
     public DateTime BirthDate { get; set; }
     public string Email { get; set; }
     public LoginDTO Login { get; set; }
-    public List<RoleDTO> Roles { get; set; }
+    public List<string> Roles { get; set; }
     public AddressDTO Address { get; set; }
     public string PhoneNumber { get; set; }
     public Gender Gender { get; set; }

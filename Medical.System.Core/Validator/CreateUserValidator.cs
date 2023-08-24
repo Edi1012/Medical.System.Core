@@ -24,7 +24,7 @@ public class CreateUserValidator : AbstractValidator<CreateUserDto>
 
         RuleFor(x => x.Roles)
             .NotEmpty().WithMessage("El usuario debe tener al menos un rol")
-            .Must(x => x.All(y => Enum.IsDefined(typeof(UserRoleEnum), y.Name))).WithMessage("El rol no existe");
+            .Must(x => x.All(role => UserRoleConstants.GetRoles().Contains(role))).WithMessage("El rol no existe");
     }
 
     public IUserRepository UserRepository { get; }

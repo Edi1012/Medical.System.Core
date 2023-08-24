@@ -45,7 +45,7 @@ public class TokenService : ITokenService
         User user = await UserRepository.GetByLogginAsync(new Loggin() { Username = loginDTO.Username, PasswordHash = loginDTO.PasswordHash });
 
 
-        if (user == null) 
+        if (user == null)
         {
             throw new NotFoundException("Usuario no encontrado.");
         }
@@ -53,7 +53,7 @@ public class TokenService : ITokenService
         //get token from DB
         var RevokedToken  = await TokenRepository.GetByUserIdAsync(user.Id);
 
-        if (RevokedToken != null) 
+        if (RevokedToken != null)
         {
             if(!RevokedToken.Revoked)
                 if(this.ValidateToken(RevokedToken.TokenID))
@@ -64,21 +64,21 @@ public class TokenService : ITokenService
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-        var claims = new[]
+        var claimsList = new List<Claim>
         {
             // Aquí puedes añadir claims adicionales como los roles del usuario
             new Claim(JwtRegisteredClaimNames.Sub, user.Login.Username),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(ClaimTypes.Role, "Admin"),
-
+            //new Claim(ClaimTypes.Role, "Admin"),
         };
-
 
         // Añadir un claim por cada rol del usuario
         foreach (var role in user.Roles)
         {
-            claims.Append(new Claim(ClaimTypes.Role, role.Name));
+            claimsList.Add(new Claim(ClaimTypes.Role, role.Name));
         }
+
+        var claims = claimsList.ToArray();
 
 
         var jwtSecurityToken = new JwtSecurityToken(
@@ -100,7 +100,7 @@ public class TokenService : ITokenService
             Revoked = false
         };
 
-        
+
         await TokenRepository.AddAsync(revokedToken);
         //UserRepository.UpdateTokenAsync(new Loggin() { Username = loginDTO.Username, Token = new JwtSecurityTokenHandler().WriteToken(token) });
 
