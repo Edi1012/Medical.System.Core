@@ -18,7 +18,7 @@ public class SupplierService : ISupplierService
         return await UnitOfWork.Supplier.GetAllAsync();
     }
 
-    public async Task<Supplier> GetById(Guid id)
+    public async Task<Supplier> GetById(string id)
     {
         return await UnitOfWork.Supplier.GetByIdAsync(id);
     }
@@ -37,7 +37,7 @@ public class SupplierService : ISupplierService
         return supplier;
     }
 
-    public async Task<Supplier> GetByIdAsync(Guid id)
+    public async Task<Supplier> GetByIdAsync(string id)
     {
         var supplier = await UnitOfWork.Supplier.GetByIdAsync(id);
         return supplier;
